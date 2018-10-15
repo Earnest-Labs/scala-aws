@@ -1,0 +1,31 @@
+version: "3"
+
+services:
+
+  library-dev:
+    build:
+      context: ./
+      dockerfile: Dockerfile.dev
+    volumes:
+      - ".:/usr/src/app"
+      - "${HOME}/.ivy2:/root/.ivy2"
+      - "${HOME}/.sbt:/root/.sbt"
+      - "${HOME}/.m2:/root/.m2"
+    links:
+      - minio
+    entrypoint:
+      - ./dev-tools/job.docker-entrypoint.sh
+
+  minio:
+      image: minio/minio
+      ports:
+       - 9002
+      environment:
+       - MINIO_ACCESS_KEY=fnordzzz
+       - MINIO_SECRET_KEY=fnordzzz
+      volumes:
+        - "miniodata:/minio"
+      command: server --address ":9002" /minio
+
+volumes:
+  miniodata:
