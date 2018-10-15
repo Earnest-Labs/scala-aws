@@ -1,7 +1,7 @@
 # scala-aws
 
 An AWS Java SDK wrapper that that embraces [referential transparency](https://www.reddit.com/r/scala/comments/8ygjcq/can_someone_explain_to_me_the_benefits_of_io/e2s29ym) 
-and composability via [Cats-effect](https://typelevel.org/cats-effect/). Only S3 abstracted for now.
+and composability via [Cats-effect](https://typelevel.org/cats-effect/). It only offers APIs for S3 for now.
   
 ## Documentation
 https://aws.amazon.com/sdk-for-java/
@@ -19,7 +19,7 @@ These are the expected environment variable by default. However, the key names a
      
 ## Script Usage
 
-A `go` wrapper is a proxy for all operations. All dependencies are managed by docker
+A `go` wrapper is a proxy for all operations. All dependencies are managed by docker.
 
 Usage: `./go <command> [sub-command]`
 
