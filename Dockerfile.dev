@@ -1,0 +1,4 @@
+FROM hseeberger/scala-sbt:8u181_2.12.7_1.2.4
+
+RUN apt-get -y update && apt-get install -y awscli
+WORKDIR /usr/src/app
