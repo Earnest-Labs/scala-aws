@@ -11,16 +11,16 @@ import scala.language.implicitConversions
 
 final class QueryOps[F[_]](val s3DS: S3DataSource[F]) extends AnyVal {
   def doesFileExist(key: String)(implicit F: Effect[F]): F[Boolean] =
-    s3DS.cs.evalOn(s3DS.blockingEc)(F.delay(s3DS.tfm.getAmazonS3Client.doesObjectExist(s3DS.s3Conf.bucket, key)))
+    s3DS.eval(F.delay(s3DS.tfm.getAmazonS3Client.doesObjectExist(s3DS.s3Conf.bucket, key)))
 
   def listDir(dir: String)(implicit F: Effect[F]): F[ListObjectsV2Result] =
-    s3DS.cs.evalOn(s3DS.blockingEc)(F.delay(s3DS.tfm.getAmazonS3Client.listObjectsV2(s3DS.s3Conf.bucket, dir)))
+    s3DS.eval(F.delay(s3DS.tfm.getAmazonS3Client.listObjectsV2(s3DS.s3Conf.bucket, dir)))
 
   def listFileMetadataInDir(dir: String)(implicit F: Effect[F]): F[List[S3ObjectSummary]] =
-    s3DS.cs.evalOn(s3DS.blockingEc)(listDir(dir).map(_.getObjectSummaries.asScala.toList))
+    s3DS.eval(listDir(dir).map(_.getObjectSummaries.asScala.toList))
 
   def getLastUploadedFileMetaInDir(dir: String)(implicit F: Effect[F]): F[Option[S3ObjectSummary]] =
-    s3DS.cs.evalOn(s3DS.blockingEc)(listFileMetadataInDir(dir).map(_.sortBy(_.getLastModified.getTime).lastOption))
+    s3DS.eval(listFileMetadataInDir(dir).map(_.sortBy(_.getLastModified.getTime).lastOption))
 }
 
 trait ToQueryOps {

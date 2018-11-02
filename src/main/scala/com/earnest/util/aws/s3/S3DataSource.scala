@@ -11,6 +11,8 @@ final case class S3DataSource[F[_]](
   s3Conf: S3ConnectionConfig,
   blockingEc: ExecutionContext,
   cs: ContextShift[F]) {
+
   def shutdown(): Unit = tfm.shutdownNow()
+  def eval[A](fa: F[A]): F[A] = cs.evalOn(blockingEc)(fa)
 }
 

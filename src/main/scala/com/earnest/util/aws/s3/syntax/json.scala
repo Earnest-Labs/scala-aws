@@ -31,7 +31,7 @@ final class JsonOps[F[_]](val s3DS: S3DataSource[F]) extends AnyVal {
       (jsonBytes => s3DS.upload(key, new ByteArrayInputStream(jsonBytes), jsonBytes.length).void)
 
   private def transformToString(is: InputStream)(implicit F: Effect[F]): F[String] = {
-    s3DS.cs.evalOn(s3DS.blockingEc)(F.bracket(F.delay(new BufferedReader(new InputStreamReader(is))))(br =>
+    s3DS.eval(F.bracket(F.delay(new BufferedReader(new InputStreamReader(is))))(br =>
       F.delay(br.lines().collect(Collectors.joining(System.lineSeparator()))))(br =>
       F.delay(br.close())))
   }
