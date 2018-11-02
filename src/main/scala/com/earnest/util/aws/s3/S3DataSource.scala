@@ -10,7 +10,7 @@ final case class S3DataSource[F[_]](
   tfm: TransferManager,
   s3Conf: S3ConnectionConfig,
   blockingEc: ExecutionContext,
-  CS: ContextShift[F]) {
+  cs: ContextShift[F]) {
   def shutdown(): Unit = tfm.shutdownNow()
 }
 

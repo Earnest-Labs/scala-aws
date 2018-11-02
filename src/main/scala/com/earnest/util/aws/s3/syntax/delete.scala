@@ -12,13 +12,13 @@ import scala.language.implicitConversions
 
 final class DeleteOps[F[_]](val s3DS: S3DataSource[F]) extends AnyVal {
   def deleteFile(key: String)(implicit F: Effect[F]): F[Unit] =
-    s3DS.CS.evalOn(s3DS.blockingEc)(F.delay(s3DS.tfm.getAmazonS3Client.deleteObject(s3DS.s3Conf.bucket, key)))
+    s3DS.cs.evalOn(s3DS.blockingEc)(F.delay(s3DS.tfm.getAmazonS3Client.deleteObject(s3DS.s3Conf.bucket, key)))
 
   def deleteFilesInDir(dir: String)(implicit F: Effect[F]): F[Unit] =
-    s3DS.CS.evalOn(s3DS.blockingEc)(s3DS.listFileMetadataInDir(dir) >>= (_.traverse(meta => deleteFile(meta.getKey)).void))
+    s3DS.cs.evalOn(s3DS.blockingEc)(s3DS.listFileMetadataInDir(dir) >>= (_.traverse(meta => deleteFile(meta.getKey)).void))
 
   def deleteFiles(fileNames: List[String])(implicit F: Effect[F]): F[Unit] =
-    s3DS.CS.evalOn(s3DS.blockingEc)(F.delay(fileNames.foreach(fileName => deleteFile(fileName))))
+    s3DS.cs.evalOn(s3DS.blockingEc)(F.delay(fileNames.foreach(fileName => deleteFile(fileName))))
 }
 
 trait ToDeleteOps {
