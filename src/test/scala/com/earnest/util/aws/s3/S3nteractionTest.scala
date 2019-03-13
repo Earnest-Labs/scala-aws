@@ -20,7 +20,7 @@ object s3Env {
   val s3DS = (config.getFromEnvironment[IO]() >>= (conf => s3.connection.createS3DataSource[IO](conf, blockingEc))).unsafeRunSync()
 }
 
-final class InteractionTest extends FreeSpec with Matchers with BeforeAndAfterAll {
+final class S3nteractionTest extends FreeSpec with Matchers with BeforeAndAfterAll {
   import s3Env._
 
   override def afterAll() = {

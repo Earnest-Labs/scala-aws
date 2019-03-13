@@ -13,6 +13,7 @@ services:
       - "${HOME}/.m2:/root/.m2"
     links:
       - minio
+      - sqs
     entrypoint:
       - ./dev-tools/job.docker-entrypoint.sh
 
@@ -26,6 +27,13 @@ services:
       volumes:
         - "miniodata:/minio"
       command: server --address ":9002" /minio
+
+  sqs:
+    image: softwaremill/elasticmq
+    ports:
+      - 9324
+    volumes:
+      - "./docker/sqs/elasticmq.conf:/opt/elasticmq.conf"
 
 volumes:
   miniodata:
