@@ -30,10 +30,12 @@ lazy val rootSettings = Seq.empty
 
 lazy val libVersions = new Object {
   val circe = "0.10.0"
+  val awsSdk = "1.11.82"
 }
 
 lazy val libraries = Seq (
-  "com.amazonaws" % "aws-java-sdk-s3" % "1.11.82",
+  "com.amazonaws" % "aws-java-sdk-s3" % libVersions.awsSdk,
+  "com.amazonaws" % "aws-java-sdk-sqs" % libVersions.awsSdk,
   "io.circe" %% "circe-core" % libVersions.circe,
   "io.circe" %% "circe-generic" % libVersions.circe,
   "io.circe" %% "circe-parser" % libVersions.circe,
