@@ -11,6 +11,7 @@ import com.earnest.util.aws.s3.S3DataSource
 import io.circe.{Decoder, Encoder}
 import io.circe.parser._
 import io.circe.syntax._
+import com.earnest.util.aws.jsonPrinter
 import com.earnest.util.aws.s3.syntax.transfer._
 
 import scala.language.implicitConversions
@@ -27,7 +28,7 @@ final class JsonOps[F[_]](val s3DS: S3DataSource[F]) extends AnyVal {
         (is => transformToString(is).map(s => parse(s).toOption.flatMap(_.as[T].toOption))))(_ => None)
 
   def upsertJson[T: Encoder](key: String, meta: T)(implicit F: Effect[F]): F[Unit] =
-    F.delay(meta.asJson.noSpaces.getBytes(Charset.forName("UTF-8"))) >>=
+    F.delay(meta.asJson.pretty(jsonPrinter).getBytes(Charset.forName("UTF-8"))) >>=
       (jsonBytes => s3DS.upload(key, new ByteArrayInputStream(jsonBytes), jsonBytes.length).void)
 
   private def transformToString(is: InputStream)(implicit F: Effect[F]): F[String] = {
